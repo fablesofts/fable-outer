@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+         http://www.springframework.org/schema/tx 
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         http://www.springframework.org/schema/util 
+         http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- 打开Spring的Annotation支持 -->
+	<context:annotation-config />
+	<!-- 设定Spring 去哪些包中找Annotation -->
+	<!-- <context:component-scan base-package="com.fable" /> -->
+	
+	<bean id="eventService" class="com.fable.hamal.shuttle.communication.service.StandardEventService" />
+	<bean id="rmiEndpoint" class="com.fable.hamal.shuttle.communication.server.RmiEndpoint" init-method="initialize" destroy-method="destroy">
+		<!--  property name="port" value="1099" /-->
+		<property name="port" value="1099"/>
+		<property name="services">
+			<list>
+				<ref bean="eventService"/>
+			</list>
+		</property>
+	</bean>
+	<!-- 以下配置是从WAR中迁过来,为了使RMI也能注入  -->
+	<aop:aspectj-autoproxy ></aop:aspectj-autoproxy>
+	<!-- 打开Spring的Annotation支持 -->
+	<context:annotation-config />
+	<!-- 导入Src目录下的jdbc.properties文件--> 
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<!-- 设定Spring 去哪些包中找Annotation -->
+	<context:component-scan base-package="com.fable" >
+		<!-- 使用注解加载除控制层以外的组件，这时，在加载service层时事务就会关联在服务层上，相关的事务注解的配置也就生效了 -->
+	  	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" /> 
+    </context:component-scan> 
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置连接池的初始值,连接池启动时创建的初始化连接数量（默认值为0）-->
+		<property name="initialSize" value="1" />
+		<!-- 连接池的最大值 -->
+		<!-- <property name="maxActive" value="500"/> -->
+		<!-- 最大空闲时，当经过一个高峰之后，连接池可以将一些用不到的连接释放，一直减少到maxIdle为止 -->
+		<!-- <property name="maxIdle" value="2"/> -->
+		<!-- 当最小空闲时，当连接少于minIdle时会自动去申请一些连接 -->
+		<property name="minIdle" value="1" />
+		<!-- 连接池中可同时连接的最大的连接数（默认值为8，调整为20，高峰单机器在20并发左右，自己根据应用场景定）  -->
+		<property name="maxActive" value="100" />
+		<property name="maxIdle" value="20" />
+		<!--maxWait: 最大等待时间，当没有可用连接时，连接池等待连接释放的最大时间，超过该时间限制会抛出异常，如果设置-1表示无限等待（默认为无限)以毫秒为单位 6000毫秒/1000等于6秒-->  
+		<property name="maxWait" value="60000" />
+		<!--removeAbandoned: 是否自动回收超时连接-->  
+		<property name="removeAbandoned" value="true"/>  
+		<!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->
+		<property name="removeAbandonedTimeout" value="180"/>
+		<!--testOnBorrow 顾明思义，就是在进行borrowObject进行处理时，对拿到的connection进行validateObject校验 -->
+		<property name="testOnBorrow" value="true"/>
+		<!-- 起了一个Evict的TimerTask定时线程进行控制(可通过设置参数timeBetweenEvictionRunsMillis>0),定时对线程池中的链接进行validateObject校验 -->
+		<property name="testWhileIdle" value="true"/>
+		<!-- 设置的Evict线程的时间，单位ms，大于0才会开启evict检查线程 -->
+		<property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+		<!-- 代表每次检查链接的数量，建议设置和maxActive一样大，这样每次可以有效检查所有的链接 -->
+		<property name="numTestsPerEvictionRun" value="100"/>
+		<!-- 验证连接是否成功的SQL语句，至少返回一行，它会在所有应用的SQL语句执行之前运行一次，mysql推荐使用  SELECT 1 -->
+		<property name="validationQuery" value="SELECT 1"/>  
+	</bean>
+	<!--创建Spring的SessionFactory工厂 -->
+	<!-- 如果使用的是Annotation的方式，不能使用LocalSessionFactoryBean,而应该使用 org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 设置Spring取那个包中查找相应的实体类 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.fable.outer.dmo</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<!-- <value> hibernate.dialect=org.hibernate.dialect.HSQLDialect </value> -->
+			<props>
+				<!-- 方言 -->
+				<prop key="hibernate.dialect">${jdbc.dialect}</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- 开启HibernateTemplate，并且为其注入SessionFactory 使用HibernateTemplate不太方便的就是要获取session得通过getSessionFactory()方法获取 -->
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<!-- 配置Spring的事务处理 -->
+	<!-- 创建事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 指定事物声明的配置方式：使用注解的方式 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+	<!-- 配置AOP，Spring是通过AOP来进行事务管理的 -->
+	<aop:config>
+		<!-- 设置pointCut表示哪些方法要加入事务处理 -->
+		<!-- 以下的事务是声明在DAO中，但是通常都会在Service来处理多个业务对象逻辑的关系，注入删除，更新等，此时如果在执行了一个步骤之后抛出异常 
+			就会导致数据不完整，所以事务不应该在DAO层处理，而应该在service，这也就是Spring所提供的一个非常方便的工具，声明式事务 -->
+		<aop:pointcut id="allMethods"
+			expression="execution(* com.fable.outer..service..*.*(..))" />
+		<!-- 通过advisor来确定具体要加入事务控制的方法 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="allMethods" />
+	</aop:config>
+
+	<!-- 配置哪些方法要加入事务控制 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 让所有的方法都加入事务管理，为了提高效率，可以把一些查询之类的方法设置为只读的事务 -->
+			<tx:method name="*" propagation="NOT_SUPPORTED" read-only="false" />
+			<!-- 以下方法都是可能设计修改的方法，就无法设置为只读 -->
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+</beans>

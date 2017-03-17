@@ -1,0 +1,21 @@
+
+   html,body { width:100%;margin:0px auto; padding:0px;}  
+  .container { margin:0px auto; padding:0px; height:100%;width:100%;min-width:700px;}
+   .error { text-align:center; margin-top:10%; }
+   .title1 { font-family:"微软雅黑"; font-size:20px; font-weight:bold; color:#525252; line-height:10px;} 
+   .title1 .title_sorry {font-family:"微软雅黑"; font-size:28px; font-weight:bold; color:#4b88c0;}
+   .title2 { font-size:14px; font-family:"微软雅黑"; color:#7f7e7e;}
+   .title3 { font-size:12px; font-family:"微软雅黑"; color:#000;}
+   
+   
+   .error_btn { text-align:center; }
+   .error_btn a { display:inline-block;width:96px; height:30px; line-height:30px; text-align:center; color:#FFF; font-size:12px; font-family:"宋体"; font-weight:bold; background:url(../images/timeout/timeout_btn_green.gif) no-repeat; margin-left:15px; }
+   .error_btn a:link {  text-decoration:none; color:#FFF; font-size:12px;}
+   .error_btn a:hover {  text-decoration:none; color:#FFF; font-size:12px; background:url(../images/timeout/timeout_btn_green_hover.gif) no-repeat;}
+   .error_btn a:visited {  text-decoration:none; color:#FFF; font-size:12px; }
+  
+  
+  
+  /*~~ 清除a标签点击后的虚线边框 ~~*/
+body a,body input {outline:none;blr:expression(this.onFocus=this.blur());}
+/*<a href="#" onfocus="this.blur();">测试</a>*/

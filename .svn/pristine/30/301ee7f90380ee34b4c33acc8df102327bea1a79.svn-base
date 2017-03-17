@@ -1,0 +1,39 @@
+.white {
+    background: #ffffff;
+    border: 1px solid #7EBDD9;
+    min-height: 20px;
+}
+
+.validatebox-invalid {
+    background: #ffffff;
+    border: 1px solid #7EBDD9;
+    min-height: 20px;
+}
+
+.combobox-invalid {
+    background: #ffffff;
+    border: 1px solid #7EBDD9;
+    min-height: 20px;
+}
+.padding-10{
+	padding: 10px 10px 10px 10px;
+}
+.h-500{
+	height: 500px;
+}
+.align-r{
+	text-align: right;
+}
+.dlg-button{
+	text-align: center; 
+	padding: 5px;
+}
+.btn{
+height:30px;
+text-align: center; 
+padding:10px;
+}
+.padding-15{
+	padding: 15px;
+	overflow: hidden;
+}

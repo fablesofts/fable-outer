@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<decorators defaultdir="/WEB-INF/decorators">
+	<!-- Any urls that are excluded will never be decorated by Sitemesh -->
+	<excludes>
+		<!--登录页面  -->
+		<pattern>/login.jsp</pattern>
+		<!--拒绝访问页面  -->
+		<pattern>/root.jsp</pattern>
+		<!-- 页面加载时间过长页面 -->
+		<pattern>/timeout.jsp</pattern>
+		<!--验证码页面  -->
+		<pattern>/commons/checkCode.jsp</pattern>
+		<!-- href -->
+		<pattern>/*/href/*</pattern>
+		<pattern>/test*</pattern>
+	</excludes>
+
+	<decorator name="new" page="fablelayout-new.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+<!-- 	<decorator name="old" page="fablelayout.jsp"> -->
+<!-- 		<pattern>/dataswitch/task-maintain</pattern> -->
+<!-- 	</decorator> -->
+	<!-- <decorator name="visitor" page="fablelayout-visitor.jsp">
+		<pattern>/sysauth/maintain</pattern>
+	</decorator> -->
+</decorators>

@@ -1,0 +1,350 @@
+package com.fable.outer.rmi.event.handler.network;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Queue;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
+
+import com.fable.dsp.common.dto.network.NetCardDto;
+import com.fable.hamal.shuttle.communication.event.Event;
+import com.fable.hamal.shuttle.communication.event.EventHandler;
+import com.fable.hamal.shuttle.communication.event.EventRegisterCenter;
+import com.fable.hamal.shuttle.communication.event.EventType;
+import com.fable.outer.rmi.event.dto.NetworkOutInfo;
+import com.fable.outer.rmi.event.help.CommonConstants;
+import com.fable.outer.rmi.event.help.NetworkCard;
+import com.fable.outer.rmi.type.CommonEventTypes;
+
+@Service
+public class NetworkCardEventHandler implements EventHandler {
+
+	private final String m_osconfirm = "确定";
+
+	private final String m_equal = "=";
+
+	private final String m_success = "启动成功。|";
+
+	private final String m_defeat = "启动失败。|";
+	private static final Logger logger = org.slf4j.LoggerFactory
+			.getLogger(NetworkCardEventHandler.class);
+	String encoding = "GBK";
+
+	String m_cardname = null;
+
+	@PostConstruct
+	public void init() {
+		EventRegisterCenter.regist(CommonEventTypes.GETCARDCOUNT, this);
+		EventRegisterCenter.regist(CommonEventTypes.SHOWCARD, this);
+		EventRegisterCenter.regist(CommonEventTypes.IPVAILD, this);
+		EventRegisterCenter.regist(CommonEventTypes.ISSUCCEED, this);
+		EventRegisterCenter.regist(CommonEventTypes.NETCARDEFFICT, this);
+	}
+
+	public Object handle(Event event) {
+		EventType type = event.getType();
+		if (CommonEventTypes.GETCARDCOUNT.equals(type)) {
+			List<NetCardDto> netCardList = null;
+			try {
+				netCardList = getNetCard();
+			} catch (Exception e) {
+				// 后期添加日志信息
+				logger.error(e.getMessage());
+			}
+			return netCardList;
+		}
+		if (CommonEventTypes.SHOWCARD.equals(type)) {
+			return getNetworkCard();
+		}
+		if (CommonEventTypes.ISSUCCEED.equals(type)) {
+			return getNetworkCardSucceed((NetworkOutInfo) event.getData());
+		}
+		if (CommonEventTypes.NETCARDEFFICT.equals(type)) {
+			return this.effictNetCard((Serializable) event.getData());
+		}
+		return null;
+	}
+
+	/**
+	 * 自动获取所有网卡.
+	 * 
+	 * @return Map(返回网卡的集合，Key网卡名称，value数组[ip,mask,gateway])
+	 */
+	public Map getNetworkCard() {
+		return NetworkCard.getNetworkCard();
+	}
+
+	/**
+	 * @author majy
+	 */
+	public Boolean effictNetCard(Serializable param) {
+		String cmd = null;
+		Boolean rt = false;
+		NetCardDto cardDto = (NetCardDto) param;
+		String sysName = System.getProperty("os.name").toLowerCase();
+		if (sysName.contains("windows")) {
+			String name = cardDto.getName().split("-", 2)[1].replace("-", " ");
+			cmd = "netsh interface ip set address \"" + name + "\" stat "
+					+ cardDto.getIp() + " " + cardDto.getSubnetMask() + " "
+					+ cardDto.getDefaultGateway() + " 1";
+			try {
+				Runtime.getRuntime().exec(cmd);
+				rt = true;
+			} catch (IOException e) {
+				// 日志记录
+				logger.error(e.getMessage());
+			}
+		} else if (sysName.contains("linux")) {
+			cmd = ("ifconfig ") + cardDto.getName() + " " + cardDto.getIp()
+					+ " netmask " + cardDto.getSubnetMask();
+			try {
+				Runtime.getRuntime().exec(cmd);
+			} catch (IOException e) {
+				// 日志记录
+				logger.error(e.getMessage());
+			}
+		}
+		return rt;
+	}
+
+	/**
+	 * @author majy
+	 * @return
+	 */
+	public List<NetCardDto> getNetCard() throws IOException {
+		List<NetCardDto> stack = new LinkedList<NetCardDto>();
+		String sysName = System.getProperty("os.name").toLowerCase();
+		if (sysName.contains("windows")) {
+			Process scanner = Runtime.getRuntime().exec("ipconfig");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					scanner.getInputStream(), Charset.forName("GBK")));
+			String temp = null;
+			Queue<String> queue = new LinkedList<String>();
+			while ((temp = reader.readLine()) != null) {
+				queue.add(temp);
+				if (queue.size() > 5) {
+					queue.poll();
+				}
+				if (temp.contains("IPv4")) {
+					NetCardDto card = new NetCardDto();
+					card.setIp(temp.split(":")[1].trim());
+					card.setSubnetMask(reader.readLine().split(":")[1].trim());
+					card.setDefaultGateway(reader.readLine().split(":")[1]
+							.trim());
+					card.setName(queue.poll().split(":")[0].trim().replace(" ",
+							"-"));
+					stack.add(card);
+				}
+			}
+			queue.clear();
+			reader.close();
+		} else if (sysName.contains("linux")) {
+			Process process = Runtime.getRuntime().exec("ifconfig");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					process.getInputStream()));
+			String temp = null;
+			while ((temp = reader.readLine()) != null) {
+				NetCardDto card = new NetCardDto();
+				temp = temp.trim().toLowerCase();
+				if (temp.contains("link")) {
+					card.setName(temp.split(" ")[0]);
+					if (card.getName().equals("lo")) {
+						continue;
+					}
+					if ((temp = reader.readLine()) == null) {
+						break;
+					}
+					temp = temp.trim();
+					if (temp.contains("inet addr:")) {
+						temp = temp.split("inet addr:")[1];
+						String[] subTemps = temp.split(" ");
+						card.setIp(subTemps[0].trim());
+						temp = temp.split(card.getIp())[1].trim().toLowerCase();
+						if (temp.contains("bcast:")) {
+							temp = temp.split("bcast:")[1];
+							card.setDefaultGateway(temp.split(" ")[0]);
+							temp = temp.replace(card.getDefaultGateway(), "")
+									.trim();
+						}
+						if (temp.contains("mask:")) {
+							card.setSubnetMask(temp.split("mask:")[1]);
+						}
+						stack.add(card);
+					}
+				}
+				reader.close();
+				process = Runtime.getRuntime().exec("route");
+				reader = new BufferedReader(new InputStreamReader(
+						process.getInputStream()));
+				while ((temp = reader.readLine()) != null) {
+					if (temp.startsWith("default")) {
+						temp = temp.split("default")[1].trim().split(" ")[0];
+						break;
+					}
+				}
+				for (NetCardDto netCardDto : stack) {
+					netCardDto.setDefaultGateway(temp);
+				}
+			}
+		}
+		return stack;
+	}
+
+	/**
+	 * 使IP生效.
+	 * 
+	 * @param entity
+	 *            交换信息实体类
+	 * @return String 返回生效的结果信息
+	 */
+	public String getIpVaild(final NetworkOutInfo entity) {
+
+		final Properties props = System.getProperties(); // 系统属性
+		final StringBuffer info = new StringBuffer("");
+		String cmd = "";
+		String cmd2 = "";
+		String mess = null;
+		m_cardname = entity.getCard_outer();
+		// 判断系统类型
+		if (props.getProperty("os.name").indexOf(
+				CommonConstants.OS_TYPE_WINDOWS) != -1) {
+			String message;
+
+			try {
+				// IP与mask的非空验证
+				if (entity.getServer_ip() != null && entity.getMask() != null) {
+					// 网关是否为空，执行的语句不同
+					if (!"".equals(entity.getGateway())
+							&& null != entity.getGateway())
+						cmd = CommonConstants.IP_VAILD_PATH_WINDWOS + "\""
+								+ m_cardname.trim() + "\" "
+								+ entity.getServer_ip() + " "
+								+ entity.getMask() + " " + entity.getGateway();
+					else
+						cmd = CommonConstants.IP_VAILD_PATH_WINDWOS + "\""
+								+ m_cardname.trim() + "\" "
+								+ entity.getServer_ip() + " "
+								+ entity.getMask();
+					final Process ps = Runtime.getRuntime().exec(cmd);
+					final BufferedReader br = new BufferedReader(
+							new InputStreamReader(ps.getInputStream()));
+					while ((message = br.readLine()) != null)
+						if (message.indexOf(this.m_osconfirm) != -1)
+							info.append("");
+						else
+							info.append(message);
+				}
+
+			} catch (final IOException e) {
+				e.printStackTrace();
+			} finally {
+				mess = this.getNetworkCardSucceed(entity);
+			}
+
+		} else {
+			String message;
+			Process ps = null;
+			BufferedReader br = null;
+			try {
+				// IP与mask的非空验证
+				if (entity.getServer_ip() != null && entity.getMask() != null) {
+					// 网关是否为空，执行的语句不同
+					if (!"".equals(entity.getGateway())
+							&& null != entity.getGateway())
+						cmd = CommonConstants.IP_VAILD_PATH_LINUX_IPSET
+								+ m_cardname + " " + entity.getServer_ip()
+								+ " " + entity.getMask() + " "
+								+ entity.getGateway();
+					else
+						cmd = CommonConstants.IP_VAILD_PATH_LINUX_IPSET
+								+ m_cardname + " " + entity.getServer_ip()
+								+ " " + entity.getMask() + " null";
+
+					System.out.println("cmd执行命令：" + cmd);
+					ps = Runtime.getRuntime().exec(cmd);
+					br = new BufferedReader(new InputStreamReader(
+							ps.getInputStream()));
+					while ((message = br.readLine()) != null) {
+						System.out.println(message);
+						// 是否存在相同IP
+						if (message.contains("Ipaddres")
+								&& message.contains("has exist"))
+							return mess = "has exist";
+						// 获取是否成功
+						if (message.contains("errorcode")) {
+							String[] messages = message.split(",");
+							String successMess = messages[0].split(":")[1];
+							if ("0".equals(successMess.trim()))
+								return m_cardname + this.m_success;
+							else
+								return m_cardname + this.m_defeat;
+						}
+					}
+
+				}
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		// IP生效后，和系统IP进行对比，查看是否一致
+
+		return mess;
+	}
+
+	/**
+	 * 网卡启动成功的验证.
+	 * 
+	 * @param entity
+	 * @return String(验证结果)
+	 */
+	public String getNetworkCardSucceed(final NetworkOutInfo entity) {
+		final Map netMap = NetworkCard.getNetworkCard();
+		final StringBuffer sb = new StringBuffer("");
+		final Set<Map.Entry<String, String[]>> set = netMap.entrySet();
+		for (final Entry<String, String[]> entry2 : set) {
+			final Map.Entry<String, String[]> entry = entry2;
+
+			System.out.println(entry.getKey() + "--->" + entry.getValue()[0]
+					+ "," + entry.getValue()[1] + "," + entry.getValue()[2]);
+
+			System.out.println(entry.getValue()[2] + "<--->"
+					+ entity.getGateway());
+
+			if (entry.getValue().length >= 2) {
+				if (entry.getKey().equals(m_cardname)
+						&& entity.getServer_ip().trim()
+								.equals(entry.getValue()[0])
+						&& entity.getMask().equals(entry.getValue()[1]))
+					if (entry.getValue()[2] == null
+							&& "".equals(entity.getGateway()))
+						sb.append(entry.getKey() + this.m_success);
+					else if (entity.getGateway().equals(entry.getValue()[2]))
+						sb.append(entry.getKey() + this.m_success);
+					else if ("".equals(entity.getGateway())
+							|| entity.getGateway() == null)
+						sb.append(entry.getKey() + this.m_success);
+					else
+						sb.append(entry.getKey() + this.m_defeat);
+
+			} else
+				sb.append(entry.getKey() + this.m_defeat);
+
+		}
+		return sb.toString();
+	}
+
+}

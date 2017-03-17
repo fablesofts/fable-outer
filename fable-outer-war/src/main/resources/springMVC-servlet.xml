@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!--添加各类型转换器，解决返回JSON时在IE下提示下载的问题  -->
+	<mvc:annotation-driven conversion-service="conversionService" ignoreDefaultModelOnRedirect="true">
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+            </bean>
+            <!-- 将默认返回的JSON数据的Content-Type设置为text/plain（注：出现这个问题原因就是Ajax返回的response的hearder 是 Content-Type=application/json。这个是新标准，IE不识别） -->
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+	<!--定义全局数据转换 -->
+	<bean id="conversionService"
+		class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!--这里可以添加多个转换器 -->
+		<property name="converters">
+			<list>
+				<bean class="com.fable.dsp.core.converter.StringToDateConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- spring在实例化@Controller类时，Spring会自动把关联的@Service（此@Service已做了@Transaction事务注解）类实例化，此时事务并未生效，导致@Transaction注解无效，事务未被注册 -->
+	<!-- 表示容器在使用注解加载控制层时,不实例化控制层以外的组件 -->
+	<context:component-scan base-package="com.fable">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<mvc:resources location="/framelayout/" mapping="/framelayout/**" />
+	<mvc:resources location="/easyui/" mapping="/easyui/**" />
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/style/" mapping="/style/**" />
+
+	<!-- 配置返回资源的前后辍 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/result/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="contentType" value="text/html; charset=utf-8" />
+	</bean>
+
+	<!-- 全局异常配置 start -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.fable.dsp.common.exception.CommonWebException">errors/500</prop><!--表示当出现CommonWebException时返回到 errors/500.jsp中 -->
+			</props>
+		</property>
+		<property name="statusCodes">
+			<props>
+				<prop key="errors/500">500</prop> <!--表示当出现CommonWebException时返回到 errors/500.jsp中时的HttpServletResponse的返回码为500 -->
+			</props>
+		</property>
+		<!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+		<property name="warnLogCategory" value="WARN"></property>
+		<!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+		<property name="defaultErrorView" value="errors/500"></property>
+		<!-- 默认HTTP状态码 -->
+		<property name="defaultStatusCode" value="500"></property>
+	</bean>
+	<!-- 全局异常配置 end -->
+</beans>

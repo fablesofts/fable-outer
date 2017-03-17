@@ -1,0 +1,13 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+/*html,#failure{ height:100%; background:#fff;}*/
+.vertical{ float:left; height:50%; margin-top:-159px; width:100%;}
+.failureMain{width:710px; margin-left:auto; margin-right:auto; height:318px; background:url(../images/404_pic.jpg) no-repeat; clear:both; overflow:auto; text-align:left; position:relative;}
+.option,.option a{ color:#3274cd;}
+.option{ position:absolute; top:178px; left:347px;}
+.rootVer{ float:left; height:50%; margin-top:-180px; width:100%;}
+.rootOpt{top:180px; left:310px;}
+.rootOpt a {background:#3DB2F5; color:#FFFFFF; line-height:24px; margin-right:10px; width:70px; display:inline-block; text-align:center; text-decoration:none;font-size:12px;font-weight:bold;border-right:1px solid #2d81b3;border-bottom:1px solid #2d81b3}
+
+.rootMain{width:500px; margin-left:auto; margin-right:auto; height:240px; background:url(../images/root.jpg) no-repeat; clear:both; overflow:auto; text-align:left; position:relative;}

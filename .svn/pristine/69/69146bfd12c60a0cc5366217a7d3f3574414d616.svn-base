@@ -1,0 +1,46 @@
+<assembly
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd"
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<id>package</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/bin</directory>
+			<outputDirectory>bin</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/config</directory>
+			<outputDirectory>config</outputDirectory>
+		</fileSet>
+		<!--  <fileSet>  
+            <directory>${project.build.directory}/classes</directory>  
+            <includes>  
+                <include>**</include>  
+            </includes>  
+            <outputDirectory>/</outputDirectory>  
+        </fileSet>   -->
+	</fileSets>
+	<dependencySets>
+		<!--只把本身的JAR放到tar.gz的根目录 -->
+		<dependencySet>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<!-- groupId:artifactId as in *:maven-* -->
+				<include>
+				com.fable.outer:outer*
+				</include>
+			</includes>
+		</dependencySet>
+		<!-- 所有依赖，不包括本身JAR放到LIB目录 -->
+		<dependencySet>
+			<!--不包括本身的JAR -->
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputDirectory>/lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+</assembly>

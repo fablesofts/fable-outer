@@ -1,0 +1,38 @@
+package com.fable.outer.rmi.type;
+
+import com.fable.hamal.shuttle.communication.event.EventType;
+
+/**
+ * 放所有的EventType
+ * 
+ * @author 汪朝
+ * 
+ */
+public enum CommonEventTypes implements EventType {
+	// 示例
+	EXAMPLE,
+	/**
+	 * SYSINFO 系统信息（内存 cpu）,
+	 * DISK 硬盘信息,
+	 * FINDLISTTABLE 获取表集合,
+	 * JUDGNETWORKCONNECT 判断网络连接端口ip,
+	 * JUDGDBCONNECT 判断数据库连接,
+	 * ADDDBTABLE 新增增量表和触发器,
+	 */
+	CPUINFO,MEMINFO,DISK,FINDLISTTABLE,JUDGNETWORKCONNECT,JUDGDBCONNECT,
+	ADDDBTABLE,
+	//浩浩
+	GETCARDCOUNT,SHOWCARD,IPVAILD,ISSUCCEED,
+	
+	FTPUSER,FTPUSER_LIST,FTPUSER_ONE,FTPUSER_UPDATE,FTPUSER_UPDATE_PASS,
+	FTPUSER_DELETE,FTPMAPPING,FTPMAPPING_UPDATE,FTPMAPPING_DELETE,
+	//爽
+
+	LISTTABLEWITHOUTFL,LISTCOLUMNBYTABLE,LISTFLTABLE,LISTDATECOLUMNNAME,
+	
+	//马健原
+	EFFICTNETCARD,LISTNETCARD
+
+	
+
+}

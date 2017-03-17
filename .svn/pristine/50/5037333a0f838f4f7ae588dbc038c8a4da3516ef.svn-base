@@ -1,0 +1,233 @@
+.icon-runFtpServer{
+	background:url('icons/application_start.png') no-repeat center center;
+}
+.icon-columnMapping{
+	background:url('icons/table_column_add.png') no-repeat center center;
+}
+.icon-brench{
+	background:url('icons/bullet_wrench_red.png') no-repeat center center;
+}
+.icon-next_blue{
+	background:url('icons/next_blue.png') no-repeat center center;
+}
+.icon-next_green{
+	background:url('icons/next_green.png') no-repeat center center;
+}
+.icon-runschedule{
+	background:url('icons/server_start.png') no-repeat center center;
+}
+.icon-schedule{
+	background:url('icons/clock_start.png') no-repeat center center;
+}
+.icon-senior{
+	background:url('icons/cog_start.png') no-repeat center center;
+}
+.icon-blank{
+	background:url('icons/blank.gif') no-repeat center center;
+}
+.icon-add{
+	background:url('icons/edit_add.png') no-repeat center center;
+}
+.icon-edit{
+	background:url('icons/pencil.png') no-repeat center center;
+}
+.icon-remove{
+	background:url('icons/edit_remove.png') no-repeat center center;
+}
+.icon-save{
+	background:url('icons/filesave.png') no-repeat center center;
+}
+.icon-cut{
+	background:url('icons/cut.png') no-repeat center center;
+}
+.icon-ok{
+	background:url('icons/ok.png') no-repeat center center;
+}
+.icon-no{
+	background:url('icons/no.png') no-repeat center center;
+}
+.icon-cancel{
+	background:url('icons/cancel.png') no-repeat center center;
+}
+.icon-reload{
+	background:url('icons/reload.png') no-repeat center center;
+}
+.icon-search{
+	background:url('icons/search.png') no-repeat center center;
+}
+.icon-print{
+	background:url('icons/print.png') no-repeat center center;
+}
+.icon-help{
+	background:url('icons/help.png') no-repeat center center;
+}
+.icon-undo{
+	background:url('icons/undo.png') no-repeat center center;
+}
+.icon-redo{
+	background:url('icons/redo.png') no-repeat center center;
+}
+.icon-back{
+	background:url('icons/back.png') no-repeat center center;
+}
+.icon-sum{
+	background:url('icons/sum.png') no-repeat center center;
+}
+.icon-tip{
+	background:url('icons/tip.png') no-repeat center center;
+}
+.icon-filter{
+	background:url('icons/filter.png') no-repeat center center;
+}
+
+.icon-mini-add{
+	background:url('icons/mini_add.png') no-repeat center center;
+}
+.icon-mini-edit{
+	background:url('icons/mini_edit.png') no-repeat center center;
+}
+.icon-mini-refresh{
+	background:url('icons/mini_refresh.png') no-repeat center center;
+}
+
+/* 下面为DSP中各级菜单图标对应的class样式 */
+/* 导航菜单 */
+.menu_nav{
+	background:url('icons/menuIcons/menu_nav.png') no-repeat center center;
+}
+
+/* 数据交换 */
+.menu_dataSwitch{
+	background:url('icons/menuIcons/menu_dataSwitching.png') no-repeat center center;
+}
+/* 数据交换-网络配置菜单 */
+.menu_dataSwitch_network{
+	background:url('icons/menuIcons/menu_dataSwitching_network.png') no-repeat center center;
+}
+/* 数据交换-任务管理菜单 */
+.menu_dataSwitch_task{
+	background:url('icons/menuIcons/menu_dataSwitching_task.png') no-repeat center center;
+}
+/* 数据交换-数据源配置 */
+.menu_dataSwitch_data{
+	background:url('icons/menuIcons/menu_dataSwitching_data.png') no-repeat center center;
+}
+
+/* 日志审计 */
+.menu_logAudit{
+	background:url('icons/menuIcons/menu_logAudit.png') no-repeat center center;
+}
+/* 日志审计-用户日志 */
+.menu_logAudit_user{
+	background:url('icons/menuIcons/menu_logAudit_user.png') no-repeat center center;
+}
+/* 日志审计-系统日志*/
+.menu_logAudit_sys{
+	background:url('icons/menuIcons/menu_systemService_system.png') no-repeat center center;
+}
+
+/* 系统授权 */
+.menu_sysAuth{
+	background:url('icons/menuIcons/menu_systemAuthorize.png') no-repeat center center;
+}
+/* 系统授权-授权管理 */
+.menu_sysAuth_auth{
+	background:url('icons/menuIcons/menu_systemAuthorize_authorize.png') no-repeat center center;
+}
+
+/* 权限管理 */
+.menu_sysManage{
+	background:url('icons/menuIcons/menu_systemManagement.png') no-repeat center center;
+}
+/* 权限管理-菜单管理 */
+.menu_sysManage_menu{
+	background:url('icons/menuIcons/menu_systemManagement_menu.png') no-repeat center center;
+}
+/* 权限管理-角色管理 */
+.menu_sysManage_role{
+	background:url('icons/menuIcons/menu_systemManagement_role.png') no-repeat center center;
+}
+/* 权限管理-用户管理 */
+.menu_sysManage_user{
+	background:url('icons/menuIcons/menu_systemManagement_user.png') no-repeat center center;
+}
+
+/* ftp服务 */
+.menu_ftpService{
+	background:url('icons/menuIcons/menu_systemService.png') no-repeat center center;
+}
+/* ftp服务-FTP目录管理 */
+.menu_ftpService_mapping{
+	background:url('icons/menuIcons/menu_systemService_mapping.png') no-repeat center center;
+}
+/* ftp服务-FTP用户管理 */
+.menu_ftpService_user{
+	background:url('icons/menuIcons/menu_systemService_user.png') no-repeat center center;
+}
+
+/* 系统状态 */
+.menu_sysStatus{
+	background:url('icons/menuIcons/menu_systemStatus.png') no-repeat center center;
+}
+/* 系统状态-系统状态信息 */
+.menu_sysStatus_info{
+	background:url('icons/menuIcons/menu_systemStatus_info.png') no-repeat center center;
+}
+
+
+/* 下面为DSP中操作图标对应的class样式 */
+.oper_add_table{
+	background:url('icons/operationIcons/add_table.png') no-repeat center center;
+}
+.oper_add{
+	background:url('icons/operationIcons/add.png') no-repeat center center;
+}
+.oper_but_cancel{
+	background:url('icons/operationIcons/but_cancel.png') no-repeat center center;
+}
+.oper_but_save{
+	background:url('icons/operationIcons/but_save.png') no-repeat center center;
+}
+.oper_but_test{
+	background:url('icons/operationIcons/but_test.png') no-repeat center center;
+}
+.oper_dispatch{
+	background:url('icons/operationIcons/dispatch.png') no-repeat center center;
+}
+.oper_download{
+	background:url('icons/operationIcons/download.png') no-repeat center center;
+}
+.oper_edit_password{
+	background:url('icons/operationIcons/edit_password.png') no-repeat center center;
+}
+.oper_ftp_start{
+	background:url('icons/operationIcons/ftp_start.png') no-repeat center center;
+}
+.oper_ftp_stop{
+	background:url('icons/operationIcons/ftp_stop.png') no-repeat center center;
+}
+.oper_option{
+	background:url('icons/operationIcons/option.png') no-repeat center center;
+}
+.oper_remove{
+	background:url('icons/operationIcons/remove.png') no-repeat center center;
+}
+.oper_set_menu{
+	background:url('icons/operationIcons/set_menu.png') no-repeat center center;
+}
+.oper_start{
+	background:url('icons/operationIcons/start.png') no-repeat center center;
+}
+.oper_upload{
+	background:url('icons/operationIcons/upload.png') no-repeat center center;
+}
+
+
+
+
+
+
+
+
+
+

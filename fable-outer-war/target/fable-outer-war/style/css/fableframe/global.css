@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+html,body {height:100%; width:100%;margin: 0;padding: 0;}  
+ul, ol, dl ,input,h1, h2, h3, h4, h5, h6, p,textarea,span{padding: 0;margin: 0;}
+
+
+
+/*~~ 清除a标签点击后的虚线边框 ~~*/
+body a,body input {outline:none;blr:expression(this.onFocus=this.blur());}
+/*<a href="#" onfocus="this.blur();">测试</a>*/
+
+/*font属性一起设置 font:font-style font-variant font-weight font-size/line-height font-family*/
+/* 用CSS表达式让IE6也支持最小宽度 */
+/*_width:expression((document.documentElement.clientWidth||document.body.clientWidth)<1000?"1000px":"");*/
+
+
+/*~~ 清除a标签内图片边框 ~~*/
+a img {border: none;}
+
+/*~~ a标签的伪类样式 如需整个网页统一效果 则设置  ~~*/
+/*a:link {color: #42413C;text-decoration: none; }
+a:visited {color: #6E6C64;text-decoration: none;}
+a:hover, a:active, a:focus { text-decoration: none;color:#CCC;}*/
+
+
+/*~~ 左外边距 ~~*/
+.marginLeft25{margin-left:25px;}
+
+
+/*~~ 浮动 依次为左浮动  右浮动 清除浮动 ~~*/
+.fltlft {float: left;margin-right: 8px;}
+.fltrt { float: right;margin-left: 8px;}
+.clearfloat {clear:both;height:0;font-size: 1px;line-height: 0px;}
+
+/*~~ 文本对齐方式 ~~*/
+.textAlignCenter{text-align:center;};
+
+
+

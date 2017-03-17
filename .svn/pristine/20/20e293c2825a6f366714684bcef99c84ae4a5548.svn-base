@@ -1,0 +1,122 @@
+@charset "utf-8";
+
+#mian{ overflow:hidden;}
+.container {width:100%;height:100%;margin: 0 auto;min-width:1000px; background:#E6EFF8;}
+/* ~~ 头部 ~~ */
+.header {width:100%;height:79px;min-width:1000px;min-height:79px;}
+		 /*~~ 头部logo ~~*/
+		 .userMsgAll{width:100%;height:79px;background:url(../../images/main/head_bg.gif) repeat-x;}
+		 .userMsgAll .logo{width:250px;height:72px;background:url(../../images/main/logo.gif) no-repeat;margin-left:40px;float:left;}	
+ 		 .userMsgAll .userMsg{width:250px;height:59px;float:right;font-size:12px;}
+		 .userMsgAll .userMsg .userMsgFir,
+		 .userMsgAll .userMsg .userMsgSec {font:'宋体';font-size:12px;text-align:right;margin-top:10px;}
+		 
+		 .userMsgAll .userMsg .userMsgFir span{margin-right:15px;}
+		 
+		 /*~~ 个人信息 ~~*/
+		 .userMsgAll .userMsg .userMsgFir a{text-decoration:none;color:#0072FF;}
+		 .userMsgAll .userMsg .userMsgFir a:link {text-decoration: none; color:#0072FF;}
+		 .userMsgAll .userMsg .userMsgFir a:visited {text-decoration: none;color:#0072FF;}
+		 .userMsgAll .userMsg .userMsgFir a:hover {text-decoration: underline;color:#0072FF;}
+		 
+
+		 .userMsgAll .userMsg .userMsgSec ul{list-style:none;float:right;} 
+		 .userMsgAll .userMsg .userMsgSec ul li{float:left;} 		 
+		 .userMsgAll .userMsg .userMsgSec ul li a{display:block;width:75px;height:25px;line-height:25px;text-align:center;}
+		 .userMsgAll .userMsg .userMsgSec ul li a:link {text-decoration: none; color:#0072FF;}
+		 .userMsgAll .userMsg .userMsgSec ul li a:visited {text-decoration: none;color:#0072FF;}
+		 .userMsgAll .userMsg .userMsgSec ul li a:hover {text-decoration: underline;color:#0072FF;}
+		 
+		 
+
+/*~~ 分割区 ~~*/
+.bgSplit{width:100%;min-width:1000px;height:15px;background-color:#E6EFF8;}
+/*~~主区域~~*/
+.main{width:100%;min-width:1000px;background-color:#E6EFF8; position:absolute; top:79px; left:0; right:0; bottom:36px;}
+		 /*~~ 左侧导航 ~~*/ 
+		 
+		 /*~~ 左侧导航一级菜单 ~~*/
+		 .sidebar1{ background-color:#FFF;border:1px solid #94B9E6;overflow-y:auto; overflow-x:hidden; position:absolute; top:0; left:5px; bottom:10px; width:173px;}
+		 .sidebar1 .nav{list-style: none;width:173px; overflow-x:hidden; overflow-y:auto;}
+	     .sidebar1 .firLi{color:#595D5E;/*width:190px;height:36px;line-height:36px;*/background:url(../../images/main/list_bg.gif) no-repeat;}
+		 .sidebar1 .firLi a{display:block;width:173px;height:35px;line-height:35px;text-indent:25px;color:#1b1b1b;font:'微软雅黑';font-size:14px;cursor:pointer;}
+		 .sidebar1 .firLi a:link {text-decoration: none; color:#1b1b1b;}
+		 .sidebar1 .firLi a:visited {text-decoration: none;color:#1b1b1b;}
+		 .sidebar1 .firLi a:hover {text-decoration: none;color:#595D5E;background:url(../../images/main/list_onmouse.gif) no-repeat;}
+		 
+		 /*~~ 左侧导航二级菜单 ~~*/
+		 .sidebar1 .hdUl{display:block;list-style:none;width:173px;background-color:#FFF;}
+		 .sidebar1 .hdLi{/*width:190px;height:31px;line-height:28px;*/cursor:pointer;}
+		 .sidebar1 .hdLi a{display:block;width:157px;height:28px;line-height:28px;text-indent:55px;font-size:12px;font:'宋体';color:#1b1b1b;margin:0px auto;}
+		 .sidebar1 .hdLi a:link {text-decoration: none; color:#1b1b1b;}
+		 .sidebar1 .hdLi a:hover {text-decoration: none;color:#1b1b1b;background:url(../../images/main/list_select.gif);}
+		 /*.sidebar1 .hdLi a:visited {text-decoration: none;color:#1b1b1b;}*/
+		 .visited_left{text-decoration: none;color:#1b1b1b;background:url(../../images/main/list_select.gif);}
+		 
+		 
+		 /*~~ 折叠区域 ~~*/
+		 .picBox {width:15px;background:#E6EFF8 url(../../images/main/right.gif) no-repeat left center;
+		 		  cursor:pointer;display: inline;border-top:1px solid #94B9E6; position:absolute; left:180px; bottom:10px; top:0;}
+			
+
+		 /*~~ 内容~~*/	
+		 .content{border:1px solid #94B9E6;background-color:#FFF; position:absolute; top:0; bottom:10px; left:195px; right:5px;}
+		 
+		 /*~~ 面包屑区域 ~~*/
+         .content .location{height:31px;background:url(../../images/main/position_bg.gif) repeat-x; left:0; right:0;}
+		 .content .location span{width:13px;height:13px;float:left;margin:8px 0px 0px 8px;} 
+		 .content .location ul{list-style:none;}		
+		 .content .location ul .locationName{float:left;height:31px;line-height:31px;font-family:'宋体';font-size:12px;color:#5e5e5e;text-align:center;}
+		 .locationName_4{width:60px;}
+		 .locationName_6{width:90px;}
+		 .content .location .part{width:15px;height:18px;line-height:18px;float:left;text-align:center;margin-top:5px;}
+		 
+		 /*~~ 查询条件区域 ~~*/
+		 .content .conditions{height:90px;border-bottom:1px  dotted #333333; left:0; right:0; top:31px;}
+		 .content .conditions .inputs{width:130px;height:25px;line-height:20px;border:1px solid  #CCC;}
+		 .content .conditions .conditionOne{float:left;font-family:'宋体';font-size:12px;color:#282828;width:210px;height:40px;line-height:40px;text-align:right;}
+		 .content .conditionsBtn{float:left;width:150px;height:40px;line-height:40px;}
+		 .content .conditionsBtn a{display:block;width:62px;height:24px;line-height:24px;text-align:center;background:url(../../images/main/btn.gif) no-repeat;margin-top:10px;
+		 						  font-family:'宋体';font-size:12px;color:#FFF;}
+		 .content .conditionsBtn a:link {text-decoration: none; color:#FFF;}
+		 .content .conditionsBtn a:visited{text-decoration: none;color:#FFF;}	
+		 .content .conditionsBtn a:hover{text-decoration: none;color:#FFF;background:url(../../images/main/btn_onmouse.gif) no-repeat;}
+		
+		 
+		 /*~~ 数据展示区域 ~~*/	
+		 .content .datas{margin-top:10px; position:absolute; top:110px; right:0; left:0; bottom:0; }
+		
+			
+/*~~脚注~~*/			
+.footer{width:100%;height:36px;line-height:36px;min-width:1000px;min-height:36px;background-color:#D3E0F1;color:#154F8E;clear:both;font-size:12px;
+		font-weight:bold;text-align:center;border-top:1px solid #94B9E6;border-bottom:1px solid #94B9E6; position:absolute; bottom:0; left:0; right:0;}
+		
+		
+
+
+	  
+
+
+
+
+
+
+	
+	
+	
+	
+
+		
+	
+	
+	
+	
+	
+
+			
+		
+	
+			
+			
+			
+		
